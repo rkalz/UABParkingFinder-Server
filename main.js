@@ -1,3 +1,8 @@
+var express = require("express");
+var app = express();
+
+app.set('port', (process.env.PORT || 5000));
+
 var admin = require("firebase-admin");
 var serviceAccount = require("./serviceAccountKey.json");
 
@@ -12,14 +17,15 @@ var db = admin.database();
 var ref = db.ref("reports");
 
 console.log("Listening to changes in database...");
-
-ref.on("child_changed", function(snapshot) {
-  var changedChild = snapshot.val();
-  var newest = changedChild[ Object.keys(changedChild).pop() ];
-  console.log("Time: " + newest.reportTime + " Lot: " + newest.lot + " Status: " + newest.status);
-  updateOverall(changedChild,newest.lot);
-}, function(errorObject) {
-  console.log("The read failed: " + errorObject.code);
+app.listen(app.get('port'), function() {
+  ref.on("child_changed", function(snapshot) {
+    var changedChild = snapshot.val();
+    var newest = changedChild[ Object.keys(changedChild).pop() ];
+    console.log("Time: " + newest.reportTime + " Lot: " + newest.lot + " Status: " + newest.status);
+    updateOverall(changedChild,newest.lot);
+  }, function(errorObject) {
+    console.log("The read failed: " + errorObject.code);
+  });
 });
 
 function updateOverall(changedChild,lotName)
