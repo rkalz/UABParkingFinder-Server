@@ -43,7 +43,7 @@ function updateOverall(changedChild,lotName)
 
   total = Math.ceil(total / reportCount);
 
-  ref.set({
+  ref.update({
     [lotName]: total
   });
 
