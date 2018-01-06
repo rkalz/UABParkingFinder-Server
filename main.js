@@ -52,8 +52,8 @@ console.log("Listening to changes in database...");
 // Get the lot that has changed and perform updateOverall
 app.listen(app.get('port'), () => {
   ref.on("child_changed", snapshot => {
-    var changedChild = snapshot.val();
-    var newest = changedChild[ Object.keys(changedChild).pop() ];
+    let changedChild = snapshot.val();
+    let newest = changedChild[ Object.keys(changedChild).pop() ];
     console.log("Time: " + newest.reportTime + " Lot: " + newest.lot + " Status: " + newest.status);
     updateOverall(changedChild,newest.lot);
   }, errorObject => {
